@@ -2,25 +2,35 @@ import React, { Component } from 'react';
 import './BoardRest.css'
 
 export default class BoardRest extends Component {
+    constructor(props) {
+        super(props);
+        this.handleTicketChange = this.handleTicketChange.bind(this);
+    }
+    
     state = {
-        tickets: [
-            {
+        tickets: {
+            id1: {
                 description: "Cook",
                 category: "backlog"
             },
-            {
+            id2: {
                 description: "Bake",
                 category: "inProgress"
             },
-            {
+            id3: {
                 description: "Buy ingredients",
                 category: "completed"
             },
-            {
+            id4: {
                 description: "Mangoes",
                 category: "backlog"
             }
-        ]
+        }
+    }
+
+    handleTicketChange(event, id) {
+        console.log(this.state.tickets);
+        this.state.tickets[id].description = event.target.values;
     }
 
     onDragOver(event) {
@@ -33,7 +43,7 @@ export default class BoardRest extends Component {
 
     onDrop(event, category) {
         let id = event.dataTransfer.getData("id");
-        let tickets = this.state.tickets.filter((ticket) => {
+        let tickets = Object.values(this.state.tickets).filter((ticket) => {
             if (ticket.description === id) {
                 ticket.category = category;
             }
@@ -54,14 +64,19 @@ export default class BoardRest extends Component {
             completed: []
         }
 
-        this.state.tickets.forEach((ticket) => {
-            tickets[ticket.category].push(
-                <div key={ticket.description}
+        Object.keys(this.state.tickets).forEach((ticketKey) => {
+            tickets[this.state.tickets[ticketKey].category].push(
+                <div key={this.state.tickets[ticketKey].description}
                     className="alert alert-dark"
                     draggable
-                    onDragStart={(event) => this.onDragStart(event, ticket.description)}
+                    onDragStart={(event) => this.onDragStart(event, this.state.tickets[ticketKey].description)}
                 >
-                    {ticket.description}
+                    <p
+                        contentEditable='true'
+                        onChange={(event)=>this.handleTicketChange(event, ticketKey)}
+                    >
+                    {this.state.tickets[ticketKey].description}
+                    </p>
                 </div>
             );
         });
