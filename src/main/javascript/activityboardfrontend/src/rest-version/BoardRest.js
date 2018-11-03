@@ -48,6 +48,15 @@ export default class BoardRest extends Component {
         this.forceUpdate(); // TODO: will need a better way to do this
     }
 
+    removeTicket(id) {
+        let filteredState = this.state.tickets.filter((ticket) => {
+            if (Object.keys(ticket)[0] !== id) {
+                return ticket;
+            }
+        })
+        this.setState({tickets: filteredState});
+    }
+
     onDragOver(event) {
         event.preventDefault();
     };
@@ -86,11 +95,22 @@ export default class BoardRest extends Component {
                     draggable
                     onDragStart={(event) => this.onDragStart(event, this.state.tickets[ticketKey].description)}
                 >
+                    <div>
+                    <div>
+                    <button type="button" className="close" ariaLabel="Close" onClick={(event)=>this.removeTicket({ticketKey})}>
+                        <span ariaHidden="true">&times;</span>
+                    </button>
+                    </div>
+
+
+                    <div>
                     <ContentEditable
                         html={this.state.tickets[ticketKey].description}
                         disabled={false}
                         onChange={(event) => {this.handleTicketChange(event, ticketKey)}}
                     />
+                    </div>
+                    </div>
                 </div>
             );
         });
