@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import ContentEditable from 'react-contenteditable';
 import './BoardRest.css'
 
+const uuid = require('uuid/v4');
+
 export default class BoardRest extends Component {
     constructor(props) {
         super(props);
@@ -33,6 +35,17 @@ export default class BoardRest extends Component {
         console.log(event.target.value)
         console.log(this.state.tickets);
         this.state.tickets[id].description = event.target.value;
+    }
+
+    addTicket(category) {
+        console.log("New ticket");
+        let myId = uuid();
+        console.log(myId);
+        this.state.tickets[myId] = {
+            description: "New ticket",
+            category: category
+        }
+        this.forceUpdate(); // TODO: will need a better way to do this
     }
 
     onDragOver(event) {
@@ -92,7 +105,10 @@ export default class BoardRest extends Component {
                             onDragOver={(event)=>this.onDragOver(event)}
                             onDrop={(event)=>this.onDrop(event, "backlog")}
                         >
-                            <h3>Backlog</h3>
+                            <div className="columnHeader d-flex flex-row justify-content-between">
+                                <div><h3>Backlog</h3></div>
+                                <div><button type="button" className="btn btn-dark" onClick={(event) => this.addTicket('backlog')}>Add</button></div>   
+                            </div> 
                             {tickets.backlog}
                         </div>
                     </div>
@@ -101,7 +117,10 @@ export default class BoardRest extends Component {
                             onDragOver={(event)=>this.onDragOver(event)}
                             onDrop={(event)=>this.onDrop(event, "inProgress")}
                         >
-                            <h3>In Progress</h3>                        
+                            <div className="columnHeader d-flex flex-row justify-content-between">
+                                <div><h3>In Progress</h3></div>
+                                <div><button type="button" className="btn btn-dark" onClick={(event) => this.addTicket('inProgress')}>Add</button></div>   
+                            </div>          
                             {tickets.inProgress}
                         </div>
                     </div>
@@ -110,7 +129,10 @@ export default class BoardRest extends Component {
                             onDragOver={(event)=>this.onDragOver(event)}
                             onDrop={(event)=>this.onDrop(event, "completed")}
                         >
-                            <h3>Completed</h3>
+                            <div className="columnHeader d-flex flex-row justify-content-between">
+                                <div><h3>Completed</h3></div>
+                                <div><button type="button" className="btn btn-dark" onClick={(event) => this.addTicket('completed')}>Add</button></div>   
+                            </div> 
                             {tickets.completed}
                         </div>
                     </div>
