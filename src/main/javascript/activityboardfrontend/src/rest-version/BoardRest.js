@@ -58,6 +58,9 @@ export default class BoardRest extends Component {
             if (ticketKey !== id.ticketKey) {
                 filteredState[ticketKey] = this.state.tickets[ticketKey]
             }
+            else {
+                this.deleteTicket(ticketKey, this.state.tickets[ticketKey].description, this.state.tickets[ticketKey].category);
+            }
         })
         console.log(filteredState);
         this.setState({tickets: filteredState});
@@ -139,6 +142,29 @@ export default class BoardRest extends Component {
         }
         fetch(baseUrl,{
             method: "PUT",
+            mode: 'cors',
+            cache: 'no-cache',
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            }
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            console.log(JSON.stringify(data));
+        }).catch((error) => {
+            console.log(error.message);
+        })
+    }
+
+    deleteTicket(id, description, category) {
+        let data = {
+            id: id,
+            description: description,
+            category: category
+        }
+        fetch(baseUrl,{
+            method: "DELETE",
             mode: 'cors',
             cache: 'no-cache',
             body: JSON.stringify(data),
