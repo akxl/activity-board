@@ -13,18 +13,7 @@ export default class BoardRest extends Component {
     
     state = {
         tickets: {
-            id1: {
-                description: "New task",
-                category: "backlog"
-            },
-            id2: {
-                description: "New task",
-                category: "inProgress"
-            },
-            id3: {
-                description: "New task",
-                category: "completed"
-            }
+            
         }
     }
 
@@ -39,6 +28,19 @@ export default class BoardRest extends Component {
                 [myId]:
                     {$set: {
                         description: "New ticket",
+                    category: category
+                    }}
+            }
+        })
+        )
+    }
+
+    addTicket(id, description, category) {
+        this.setState(update(this.state, {
+            tickets: {
+                [id]:
+                    {$set: {
+                        description: description,
                     category: category
                     }}
             }
@@ -80,8 +82,7 @@ export default class BoardRest extends Component {
         })
     }
 
-    componentWillMount() {
-
+    refreshTickets() {
         fetch('http://localhost:8080/api/ticket',{
             method: "GET",
             mode: 'cors',
@@ -91,11 +92,19 @@ export default class BoardRest extends Component {
             }
         }).then((response) => {
             return response.json();
-        }).then((myJson) => {
-            console.log(JSON.stringify(myJson));
+        }).then((data) => {
+            console.log(JSON.stringify(data));
+            data.forEach((ticket) => {
+                this.addTicket(ticket.id, ticket.description, ticket.category)
+            })
         }).catch((error) => {
             console.log(error.message);
         })
+    }
+
+    componentWillMount() {
+
+        this.refreshTickets();
 
     }
 
