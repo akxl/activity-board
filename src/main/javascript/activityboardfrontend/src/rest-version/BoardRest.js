@@ -5,7 +5,7 @@ import './BoardRest.css'
 
 const uuid = require('uuid/v4');
 
-const baseUrl = 'http://localhost:8080/api/ticket';
+const baseUrl = '/api/ticket';
 
 export default class BoardRest extends Component {
     constructor(props) {
