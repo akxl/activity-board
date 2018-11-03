@@ -49,11 +49,14 @@ export default class BoardRest extends Component {
     }
 
     removeTicket(id) {
-        let filteredState = this.state.tickets.filter((ticket) => {
-            if (Object.keys(ticket)[0] !== id) {
-                return ticket;
+        console.log(id)
+        var filteredState = {}
+        Object.keys(this.state.tickets).forEach((ticketKey) => {
+            if (ticketKey != id.ticketKey) {
+                filteredState[ticketKey] = this.state.tickets[ticketKey]
             }
         })
+        console.log(filteredState);
         this.setState({tickets: filteredState});
     }
 
