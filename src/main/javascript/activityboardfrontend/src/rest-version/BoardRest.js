@@ -75,6 +75,7 @@ export default class BoardRest extends Component {
         let id = event.dataTransfer.getData("id");
         console.log(id)
         let description = this.state.tickets[id].description;
+        this.updateTicket(id, description, category);
         this.setState(update(this.state, {
             tickets: {
                 [id]:
