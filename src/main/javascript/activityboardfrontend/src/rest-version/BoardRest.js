@@ -95,15 +95,15 @@ export default class BoardRest extends Component {
 
         Object.keys(this.state.tickets).forEach((ticketKey) => {
             tickets[this.state.tickets[ticketKey].category].push(
-                <div key={this.state.tickets[ticketKey].description}
+                <div key={ticketKey}
                     className="alert alert-dark"
                     draggable
                     onDragStart={(event) => this.onDragStart(event, this.state.tickets[ticketKey].description)}
                 >
                     <div>
                     <div>
-                    <button type="button" className="close" ariaLabel="Close" onClick={(event)=>this.removeTicket({ticketKey})}>
-                        <span ariaHidden="true">&times;</span>
+                    <button type="button" className="close" aria-label="Close" onClick={(event)=>this.removeTicket({ticketKey})}>
+                        <span aria-hidden="true">&times;</span>
                     </button>
                     </div>
 
