@@ -14,20 +14,16 @@ export default class BoardRest extends Component {
     state = {
         tickets: {
             id1: {
-                description: "Cook",
+                description: "New task",
                 category: "backlog"
             },
             id2: {
-                description: "Bake",
+                description: "New task",
                 category: "inProgress"
             },
             id3: {
-                description: "Buy ingredients",
+                description: "New task",
                 category: "completed"
-            },
-            id4: {
-                description: "Mangoes",
-                category: "backlog"
             }
         }
     }
@@ -82,6 +78,25 @@ export default class BoardRest extends Component {
             ...this.state,
             tickets
         })
+    }
+
+    componentWillMount() {
+
+        fetch('http://localhost:8080/api/ticket',{
+            method: "GET",
+            mode: 'cors',
+            cache: 'no-cache',
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            }
+        }).then((response) => {
+            return response.json();
+        }).then((myJson) => {
+            console.log(JSON.stringify(myJson));
+        }).catch((error) => {
+            console.log(error.message);
+        })
+
     }
 
 
