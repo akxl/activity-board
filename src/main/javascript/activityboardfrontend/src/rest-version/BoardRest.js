@@ -5,6 +5,8 @@ import './BoardRest.css'
 
 const uuid = require('uuid/v4');
 
+const baseUrl = 'http://localhost:8080/api/ticket';
+
 export default class BoardRest extends Component {
     constructor(props) {
         super(props);
@@ -23,19 +25,20 @@ export default class BoardRest extends Component {
 
     addTicket(category) {
         let myId = uuid();
+        this.insertTicket(myId, "New ticket", category);
         this.setState(update(this.state, {
             tickets: {
                 [myId]:
                     {$set: {
                         description: "New ticket",
-                    category: category
+                        category: category
                     }}
             }
         })
         )
     }
 
-    addTicket(id, description, category) {
+    displayRefreshedTickets(id, description, category) {
         this.setState(update(this.state, {
             tickets: {
                 [id]:
@@ -73,6 +76,7 @@ export default class BoardRest extends Component {
         let tickets = Object.values(this.state.tickets).filter((ticket) => {
             if (ticket.description === id) {
                 ticket.category = category;
+                this.updateTicket(ticket.id, ticket.description, ticket.category);
             }
             return ticket;
         });
@@ -83,7 +87,7 @@ export default class BoardRest extends Component {
     }
 
     refreshTickets() {
-        fetch('http://localhost:8080/api/ticket',{
+        fetch(baseUrl,{
             method: "GET",
             mode: 'cors',
             cache: 'no-cache',
@@ -95,8 +99,54 @@ export default class BoardRest extends Component {
         }).then((data) => {
             console.log(JSON.stringify(data));
             data.forEach((ticket) => {
-                this.addTicket(ticket.id, ticket.description, ticket.category)
+                this.displayRefreshedTickets(ticket.id, ticket.description, ticket.category)
             })
+        }).catch((error) => {
+            console.log(error.message);
+        })
+    }
+
+    insertTicket(id, description, category) {
+        let data = {
+            id: id,
+            description: description,
+            category: category
+        }
+        fetch(baseUrl,{
+            method: "POST",
+            mode: 'cors',
+            cache: 'no-cache',
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            }
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            console.log(JSON.stringify(data));
+        }).catch((error) => {
+            console.log(error.message);
+        })
+    }
+
+    updateTicket(id, description, category) {
+        let data = {
+            id: id,
+            description: description,
+            category: category
+        }
+        fetch(baseUrl,{
+            method: "PUT",
+            mode: 'cors',
+            cache: 'no-cache',
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            }
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            console.log(JSON.stringify(data));
         }).catch((error) => {
             console.log(error.message);
         })
