@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ContentEditable from 'react-contenteditable';
+import update from 'immutability-helper';
 import './BoardRest.css'
 
 const uuid = require('uuid/v4');
@@ -38,14 +39,17 @@ export default class BoardRest extends Component {
     }
 
     addTicket(category) {
-        console.log("New ticket");
         let myId = uuid();
-        console.log(myId);
-        this.state.tickets[myId] = {
-            description: "New ticket",
-            category: category
-        }
-        this.forceUpdate(); // TODO: will need a better way to do this
+        this.setState(update(this.state, {
+            tickets: {
+                [myId]:
+                    {$set: {
+                        description: "New ticket",
+                    category: category
+                    }}
+            }
+        })
+        )
     }
 
     removeTicket(id) {
