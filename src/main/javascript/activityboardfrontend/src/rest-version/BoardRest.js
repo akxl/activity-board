@@ -55,7 +55,7 @@ export default class BoardRest extends Component {
         console.log(id)
         var filteredState = {}
         Object.keys(this.state.tickets).forEach((ticketKey) => {
-            if (ticketKey != id.ticketKey) {
+            if (ticketKey !== id.ticketKey) {
                 filteredState[ticketKey] = this.state.tickets[ticketKey]
             }
         })
@@ -73,17 +73,18 @@ export default class BoardRest extends Component {
 
     onDrop(event, category) {
         let id = event.dataTransfer.getData("id");
-        let tickets = Object.values(this.state.tickets).filter((ticket) => {
-            if (ticket.description === id) {
-                ticket.category = category;
-                this.updateTicket(ticket.id, ticket.description, ticket.category);
+        console.log(id)
+        let description = this.state.tickets[id].description;
+        this.setState(update(this.state, {
+            tickets: {
+                [id]:
+                    {$set: {
+                        description: description,
+                        category: category
+                    }}
             }
-            return ticket;
-        });
-        this.setState({
-            ...this.state,
-            tickets
         })
+        )
     }
 
     refreshTickets() {
@@ -172,7 +173,7 @@ export default class BoardRest extends Component {
                 <div key={ticketKey}
                     className="alert alert-dark"
                     draggable
-                    onDragStart={(event) => this.onDragStart(event, this.state.tickets[ticketKey].description)}
+                    onDragStart={(event) => this.onDragStart(event, ticketKey)}
                 >
                     <div>
                     <div>
