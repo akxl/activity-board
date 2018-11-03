@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ContentEditable from 'react-contenteditable';
 import './BoardRest.css'
 
 export default class BoardRest extends Component {
@@ -29,8 +30,9 @@ export default class BoardRest extends Component {
     }
 
     handleTicketChange(event, id) {
+        console.log(event.target.value)
         console.log(this.state.tickets);
-        this.state.tickets[id].description = event.target.values;
+        this.state.tickets[id].description = event.target.value;
     }
 
     onDragOver(event) {
@@ -71,12 +73,11 @@ export default class BoardRest extends Component {
                     draggable
                     onDragStart={(event) => this.onDragStart(event, this.state.tickets[ticketKey].description)}
                 >
-                    <p
-                        contentEditable='true'
-                        onChange={(event)=>this.handleTicketChange(event, ticketKey)}
-                    >
-                    {this.state.tickets[ticketKey].description}
-                    </p>
+                    <ContentEditable
+                        html={this.state.tickets[ticketKey].description}
+                        disabled={false}
+                        onChange={(event) => {this.handleTicketChange(event, ticketKey)}}
+                    />
                 </div>
             );
         });
