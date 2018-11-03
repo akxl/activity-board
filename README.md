@@ -1,6 +1,8 @@
 Activity Board
 --------------
 
+![screenshot of application](https://github.com/akxl/activity-board/blob/master/screenshot.png)
+
 This is a toy application. Used by me to play around with Spring and ReactJS.
 
 Take it as a cheap knock off of other applications of the same genre.
