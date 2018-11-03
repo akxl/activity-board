@@ -33,8 +33,6 @@ export default class BoardRest extends Component {
     }
 
     handleTicketChange(event, id) {
-        console.log(event.target.value)
-        console.log(this.state.tickets);
         this.state.tickets[id].description = event.target.value;
     }
 
